@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Gap Analysis - DataPath Navigator</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="skillgap">
+    <div class="app-container">
+        <main class="main-content">
+            <div class="page-content">
+                <h1 class="page-title">📊 Skill Gap Analysis</h1>
+                <p class="page-subtitle">Identify skills you need for your target career</p>
+
+                <div class="card mb-4">
+                    <div class="form-group">
+                        <label>Select Target Career</label>
+                        <select id="careerSelect" class="form-control" onchange="analyzeSkillGap()">
+                            <option value="">Loading careers...</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="gapAnalysis" style="display: none;">
+                    <!-- Stats -->
+                    <div class="grid grid-3 mb-4">
+                        <div class="card text-center">
+                            <div class="text-muted">Match Score</div>
+                            <h1 style="font-size: 3rem; color: var(--accent-yellow); margin-top: 0.5rem;">
+                                <span id="matchScore">0</span>%
+                            </h1>
+                        </div>
+                        <div class="card text-center">
+                            <div class="text-muted">Skills Matched</div>
+                            <h1 id="matchedCount" style="font-size: 3rem; color: var(--success); margin-top: 0.5rem;">0</h1>
+                        </div>
+                        <div class="card text-center">
+                            <div class="text-muted">Skills to Learn</div>
+                            <h1 id="missingCount" style="font-size: 3rem; color: var(--danger); margin-top: 0.5rem;">0</h1>
+                        </div>
+                    </div>
+
+                    <!-- AI Advice -->
+                    <div class="card mb-4">
+                        <div class="card-title">🤖 AI Advice</div>
+                        <div id="aiAdvice" style="white-space: pre-wrap; line-height: 1.8; color: var(--text-secondary);"></div>
+                    </div>
+
+                    <!-- Skill Categories -->
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <div class="card-title">✅ Your Strengths</div>
+                            <div id="strengthsList" class="mt-2"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">⚠️ Critical Missing</div>
+                            <div id="criticalList" class="mt-2"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">📈 Developing</div>
+                            <div id="developingList" class="mt-2"></div>
+                        </div>
+                        <div class="card">
+                            <div class="card-title">💡 Nice to Have</div>
+                            <div id="niceList" class="mt-2"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/shared.js"></script>
+    <script src="js/skill-gap.js"></script>
+</body>
+</html>

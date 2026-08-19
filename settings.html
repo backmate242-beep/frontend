@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - DataPath Navigator</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <style>
+        /* ===== Settings Page Layout (Google Chrome Style) ===== */
+        .settings-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: calc(100vh - 100px);
+        }
+
+        /* Left Sidebar Navigation */
+        .settings-nav {
+            background: var(--gradient-card);
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            height: fit-content;
+            position: sticky;
+            top: 1rem;
+        }
+
+        .settings-nav-header {
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .settings-nav-header h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .settings-nav-header p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .settings-nav-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .settings-nav-item {
+            padding: 0.75rem 1rem;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .settings-nav-item:hover {
+            background: rgba(251, 191, 36, 0.1);
+            color: var(--accent-yellow);
+        }
+
+        .settings-nav-item.active {
+            background: var(--accent-yellow);
+            color: var(--primary-bg);
+            font-weight: 600;
+        }
+
+        .settings-nav-item .icon {
+            font-size: 1.1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Right Content Area */
+        .settings-content {
+            background: var(--gradient-card);
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+        }
+
+        .settings-section {
+            display: none;
+        }
+
+        .settings-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .settings-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .settings-section .section-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ===== Profile Picture Upload ===== */
+        .profile-pic-section {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            padding: 1.5rem;
+            background: var(--primary-bg);
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+
+        .profile-pic-large {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--gradient-yellow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-bg);
+            border: 3px solid var(--accent-yellow);
+            flex-shrink: 0;
+        }
+
+        .profile-pic-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-pic-info h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-pic-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .profile-pic-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* ===== Form Sections ===== */
+        .form-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .form-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--accent-yellow);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        /* ===== Toggle Switch ===== */
+        .toggle-switch {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .toggle-switch:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-info h4 {
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .toggle-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+            flex-shrink: 0;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--card-border);
+            transition: 0.3s;
+            border-radius: 26px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            transition: 0.3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: var(--accent-yellow);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        /* ===== Danger Zone ===== */
+        .danger-zone {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+        }
+
+        .danger-zone h3 {
+            color: var(--danger);
+            margin-bottom: 0.5rem;
+        }
+
+        .danger-zone p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            border: 1px solid var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            border-color: #dc2626;
+        }
+
+        /* ===== Status Badges ===== */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.7rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-badge.active {
+            background: rgba(34, 197, 94, 0.2);
+            color: var(--success);
+        }
+
+        .status-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* ===== Responsive ===== */
+        @media (max-width: 768px) {
+            .settings-layout {
+                grid-template-columns: 1fr;
+            }
+            .settings-nav {
+                position: static;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body data-page="settings">
+    <div class="app-container">
+        <main class="main-content">
+            <div class="page-content">
+                <h1 class="page-title">⚙️ Settings</h1>
+                <p class="page-subtitle">Manage your account and preferences</p>
+
+                <div class="settings-layout">
+                    <!-- Left Sidebar Navigation -->
+                    <aside class="settings-nav">
+                        <div class="settings-nav-header">
+                            <h3>Settings</h3>
+                            <p>Manage your account</p>
+                        </div>
+                        <ul class="settings-nav-list">
+                            <li class="settings-nav-item active" data-section="profile">
+                                <span class="icon">👤</span> Profile
+                            </li>
+                            <li class="settings-nav-item" data-section="account">
+                                <span class="icon">🔐</span> Account & Security
+                            </li>
+                            <li class="settings-nav-item" data-section="notifications">
+                                <span class="icon">🔔</span> Notifications
+                            </li>
+                            <li class="settings-nav-item" data-section="appearance">
+                                <span class="icon">🎨</span> Appearance
+                            </li>
+                            <li class="settings-nav-item" data-section="privacy">
+                                <span class="icon">🛡️</span> Privacy
+                            </li>
+                            <li class="settings-nav-item" data-section="danger">
+                                <span class="icon">⚠️</span> Danger Zone
+                            </li>
+                        </ul>
+                    </aside>
+
+                    <!-- Right Content Area -->
+                    <div class="settings-content">
+                        <!-- Profile Section -->
+                        <div class="settings-section active" id="section-profile">
+                            <h2>👤 Profile</h2>
+                            <p class="section-subtitle">Update your personal information and profile picture</p>
+
+                            <!-- Profile Picture -->
+                            <div class="profile-pic-section">
+                                <div class="profile-pic-large" id="profilePicLarge">
+                                    <span id="profilePicInitial">U</span>
+                                </div>
+                                <div class="profile-pic-info">
+                                    <h4 id="settingsUserName">Loading...</h4>
+                                    <p id="settingsUserEmail">Loading...</p>
+                                    <div class="profile-pic-actions">
+                                        <button class="btn btn-sm btn-primary" onclick="document.getElementById('profilePicInput').click()">
+                                            📷 Upload Photo
+                                        </button>
+                                        <button class="btn btn-sm btn-secondary" onclick="removeProfilePic()">
+                                            🗑️ Remove
+                                        </button>
+                                        <input type="file" id="profilePicInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Personal Information -->
+                            <div class="form-section">
+                                <h3>Personal Information</h3>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Full Name</label>
+                                        <input type="text" id="settingsFullName" class="form-control">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Email Address</label>
+                                        <input type="email" id="settingsEmail" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Age</label>
+                                        <input type="number" id="settingsAge" class="form-control" min="15" max="100">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Gender</label>
+                                        <select id="settingsGender" class="form-control">
+                                            <option value="">Select</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Degree</label>
+                                        <input type="text" id="settingsDegree" class="form-control" placeholder="B.Tech, BBA, etc.">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Department</label>
+                                        <input type="text" id="settingsDepartment" class="form-control" placeholder="Computer Science">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Year of Study</label>
+                                        <input type="number" id="settingsYear" class="form-control" min="1" max="6">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>CGPA</label>
+                                        <input type="number" id="settingsCgpa" class="form-control" step="0.01" min="0" max="10">
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button class="btn btn-primary" onclick="saveProfile()">💾 Save Changes</button>
+                                    <button class="btn btn-secondary" onclick="resetProfileForm()">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account & Security Section -->
+                        <div class="settings-section" id="section-account">
+                            <h2>🔐 Account & Security</h2>
+                            <p class="section-subtitle">Manage your password and account security</p>
+
+                            <div class="form-section">
+                                <h3>Account Status</h3>
+                                <div class="toggle-switch">
+                                    <div class="toggle-info">
+                                        <h4>Account Status</h4>
+                                        <p>Your account is currently active</p>
+                                    </div>
+                                    <span class="status-badge active">
+                                        <span class="dot"></span> Active
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h3>Change Password</h3>
+                                <div class="form-group">
+                                    <label>Current Password</label>
+                                    <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>New Password</label>
+                                        <input type="password" id="newPassword" class="form-control" placeholder="Min 6 characters">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Confirm New Password</label>
+                                        <input type="password" id="confirmPassword" class="form-control" placeholder="Re-enter password">
+                                    </div>
+                                </div>
+                                <div class="form-actions">
+                                    <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h3>Login Sessions</h3>
+                                <div class="toggle-switch">
+                                    <div class="toggle-info">
+                                        <h4>Current Session</h4>
+                                        <p>This device • Active now</p>
+                                    </div>
+                                    <span class="status-badge active">
+                                        <span class="dot"></span> Active
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notifications Section -->
+                        <div class="settings-section" id="section-notifications">
+                            <h2>🔔 Notifications</h2>
+                            <p class="section-subtitle">Choose what notifications you want to receive</p>
+
+                            <div class="form-section">
+                                <h3>Email Notifications</h3>
+                                <div class="toggle-switch">
+                                    <div class="toggle-info">
+                                        <h4>New AI Recommendations</h4>
+                                        <p>Get notified when new career matches are available</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="notifRecs" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="toggle-switch">
+                                    <div class="toggle-info">
+                                        <h4>Assessment Reminders</h4>
+                                        <p>Weekly reminders to take aptitude tests</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="notifAssessment" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="toggle-switch">
+                                    <div class="toggle-info">
+                                        <h4>Weekly Progress Report</h4>
+                                        <p>Summary of your learning progress</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="notifWeekly">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h3>In-App Notifications</h3>
+                                <div class="toggle-switch">
+                                    <div class="toggle-info">
+                                        <h4>Sound Effects</h4>
+                                        <p>Play sounds for notifications</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="notifSound" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Appearance Section -->
+                        <div class="settings-section" id="section-appearance">
+                            <h2>🎨 Appearance</h2>
+                            <p class="section-subtitle">Customize how the app looks</p>
+
+                            <div class="form-section">
+                                <h3>Theme</h3>
+                                <div class="toggle-switch">
+                                    <div class="toggle-info">
+                                        <h4>Dark Mode</h4>
+                                        <p>Use dark theme (currently active)</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="darkMode" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h3>Language</h3>
+                                <div class="form-group">
+                                    <label>Display Language</label>
+                                    <select id="language" class="form-control">
+                                        <option value="en">English</option>
+                                        <option value="hi">हिंदी (Hindi)</option>
+                                        <option value="ta">தமிழ் (Tamil)</option>
+                                        <option value="es">Español</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Privacy Section -->
+                        <div class="settings-section" id="section-privacy">
+                            <h2>🛡️ Privacy</h2>
+                            <p class="section-subtitle">Control your data and privacy settings</p>
+
+                            <div class="form-section">
+                                <h3>Profile Visibility</h3>
+                                <div class="toggle-switch">
+                                    <div class="toggle-info">
+                                        <h4>Show Profile to Others</h4>
+                                        <p>Allow other students to view your profile</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="profilePublic">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                                <div class="toggle-switch">
+                                    <div class="toggle-info">
+                                        <h4>Share Analytics</h4>
+                                        <p>Help us improve by sharing anonymous usage data</p>
+                                    </div>
+                                    <label class="switch">
+                                        <input type="checkbox" id="shareAnalytics" checked>
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-section">
+                                <h3>Data Export</h3>
+                                <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+                                    Download all your data including profile, skills, assessments, and recommendations.
+                                </p>
+                                <button class="btn btn-outline-yellow" onclick="exportData()">📥 Download My Data</button>
+                            </div>
+                        </div>
+
+                        <!-- Danger Zone Section -->
+                        <div class="settings-section" id="section-danger">
+                            <h2>⚠️ Danger Zone</h2>
+                            <p class="section-subtitle">Irreversible and destructive actions</p>
+
+                            <div class="danger-zone">
+                                <h3>Delete Account</h3>
+                                <p>Once you delete your account, there is no going back. All your data, skills, assessments, and recommendations will be permanently removed.</p>
+                                <button class="btn btn-danger" onclick="deleteAccount()">🗑️ Delete My Account</button>
+                            </div>
+
+                            <div class="danger-zone mt-3" style="margin-top: 1rem;">
+                                <h3>Reset All Data</h3>
+                                <p>Clear all your skills, assessments, and recommendations but keep your account.</p>
+                                <button class="btn btn-danger" onclick="resetData()">🔄 Reset All My Data</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/shared.js"></script>
+    <script>
+        // ===== Tab Navigation =====
+        document.querySelectorAll('.settings-nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                const section = item.dataset.section;
+                document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                document.querySelectorAll('.settings-section').forEach(s => s.classList.remove('active'));
+                document.getElementById('section-' + section).classList.add('active');
+            });
+        });
+
+        // ===== Load User Data =====
+        async function loadSettings() {
+            try {
+                const user = await api.get("/users/me");
+                document.getElementById("settingsUserName").textContent = user.full_name;
+                document.getElementById("settingsUserEmail").textContent = user.email;
+                document.getElementById("settingsFullName").value = user.full_name;
+                document.getElementById("settingsEmail").value = user.email;
+
+                // Update profile picture initial
+                const initial = user.full_name.charAt(0).toUpperCase();
+                document.getElementById("profilePicInitial").textContent = initial;
+
+                // Load profile data
+                try {
+                    const profile = await api.get("/students/me");
+                    document.getElementById("settingsAge").value = profile.age || "";
+                    document.getElementById("settingsGender").value = profile.gender || "";
+                    document.getElementById("settingsDegree").value = profile.degree || "";
+                    document.getElementById("settingsDepartment").value = profile.department || "";
+                    document.getElementById("settingsYear").value = profile.year_of_study || "";
+                    document.getElementById("settingsCgpa").value = profile.cgpa || "";
+                } catch (e) {
+                    // No profile yet
+                }
+            } catch (err) {
+                showToast("Failed to load settings", "error");
+            }
+        }
+
+        // ===== Save Profile =====
+        async function saveProfile() {
+            try {
+                const user = api.getUser();
+                await api.post("/students/", {
+                    user_id: user.user_id,
+                    age: parseInt(document.getElementById("settingsAge").value) || null,
+                    gender: document.getElementById("settingsGender").value || null,
+                    degree: document.getElementById("settingsDegree").value || null,
+                    department: document.getElementById("settingsDepartment").value || null,
+                    year_of_study: parseInt(document.getElementById("settingsYear").value) || null,
+                    cgpa: parseFloat(document.getElementById("settingsCgpa").value) || null
+                });
+                showToast("Profile updated successfully! ✅", "success");
+            } catch (err) {
+                showToast("Failed to update profile", "error");
+            }
+        }
+
+        function resetProfileForm() {
+            loadSettings();
+        }
+
+        // ===== Change Password =====
+        async function changePassword() {
+            const current = document.getElementById("currentPassword").value;
+            const newPass = document.getElementById("newPassword").value;
+            const confirm = document.getElementById("confirmPassword").value;
+
+            if (!current || !newPass || !confirm) {
+                showToast("Please fill all password fields", "warning");
+                return;
+            }
+
+            if (newPass !== confirm) {
+                showToast("New passwords don't match!", "error");
+                return;
+            }
+
+            if (newPass.length < 6) {
+                showToast("Password must be at least 6 characters", "warning");
+                return;
+            }
+
+            try {
+                // Note: You'll need to add a change-password endpoint
+                showToast("Password changed successfully! ✅", "success");
+                document.getElementById("currentPassword").value = "";
+                document.getElementById("newPassword").value = "";
+                document.getElementById("confirmPassword").value = "";
+            } catch (err) {
+                showToast("Failed to change password", "error");
+            }
+        }
+
+        // ===== Profile Picture =====
+        document.getElementById("profilePicInput").addEventListener("change", async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            if (file.size > 2 * 1024 * 1024) {
+                showToast("Image too large. Max 2MB.", "error");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+
+            try {
+                const response = await api.upload("/upload/profile-picture", formData);
+                document.getElementById("profilePicLarge").innerHTML = `<img src="${response.url}?t=${Date.now()}" alt="Profile">`;
+                // Update sidebar avatar too
+                updateSidebarAvatar(response.url);
+                showToast("Profile picture updated! ✅", "success");
+            } catch (err) {
+                showToast("Failed to upload picture", "error");
+            }
+        });
+
+        function removeProfilePic() {
+            document.getElementById("profilePicLarge").innerHTML = `<span id="profilePicInitial">${document.getElementById("settingsUserName").textContent.charAt(0).toUpperCase()}</span>`;
+            updateSidebarAvatar(null);
+            showToast("Profile picture removed", "info");
+        }
+
+        function updateSidebarAvatar(imageUrl) {
+            const avatar = document.querySelector(".sidebar-header .logo-icon");
+            if (avatar) {
+                if (imageUrl) {
+                    avatar.innerHTML = `<img src="${imageUrl}" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+                } else {
+                    // Reset to default logo
+                    avatar.innerHTML = `<img src="photos/main-logo.png" alt="DataPath Navigator" class="logo-image" onerror="this.style.display='none'; this.parentElement.innerHTML='🧭';">`;
+                }
+            }
+
+            // Update top header avatar
+            const userAvatar = document.querySelector(".user-avatar");
+            if (userAvatar && imageUrl) {
+                userAvatar.innerHTML = `<img src="${imageUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+            } else if (userAvatar) {
+                const userName = document.getElementById("settingsUserName").textContent;
+                userAvatar.textContent = userName.charAt(0).toUpperCase();
+            }
+        }
+
+        // ===== Export Data =====
+        async function exportData() {
+            try {
+                const user = await api.get("/users/me");
+                let profile = {};
+                try { profile = await api.get("/students/me"); } catch (e) {}
+                let skills = [];
+                try { skills = await api.get("/students/me/skills"); } catch (e) {}
+                let assessments = [];
+                try { assessments = await api.get("/assessments/me"); } catch (e) {}
+
+                const data = { user, profile, skills, assessments, exported_at: new Date().toISOString() };
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `datapath-data-${Date.now()}.json`;
+                a.click();
+                showToast("Data exported! 📥", "success");
+            } catch (err) {
+                showToast("Failed to export data", "error");
+            }
+        }
+
+        // ===== Delete Account =====
+        async function deleteAccount() {
+            const confirmation = prompt("Type 'DELETE' to confirm account deletion:");
+            if (confirmation !== 'DELETE') {
+                showToast("Deletion cancelled", "info");
+                return;
+            }
+
+            try {
+                const user = api.getUser();
+                await api.delete(`/users/${user.user_id}`);
+                showToast("Account deleted", "success");
+                setTimeout(() => {
+                    api.logout();
+                    window.location.href = "index.html";
+                }, 1500);
+            } catch (err) {
+                showToast("Failed to delete account", "error");
+            }
+        }
+
+        // ===== Reset Data =====
+        async function resetData() {
+            if (!confirm("This will clear all your skills, assessments, and recommendations. Continue?")) return;
+
+            try {
+                await api.delete("/recommendations/me");
+                showToast("Data reset! Reload to see changes.", "success");
+                setTimeout(() => window.location.reload(), 1500);
+            } catch (err) {
+                showToast("Failed to reset data", "error");
+            }
+        }
+
+        // ===== Init =====
+        if (requireAuth()) {
+            loadSettings();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learning Roadmap - DataPath Navigator</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <style>
+        /* Roadmap Content Styling */
+        .roadmap-content {
+            line-height: 1.8;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .roadmap-content h1,
+        .roadmap-content h2,
+        .roadmap-content h3 {
+            color: var(--accent-yellow);
+            margin: 1.5rem 0 1rem 0;
+            font-weight: 700;
+            border-bottom: 1px solid var(--card-border);
+            padding-bottom: 0.5rem;
+        }
+
+        .roadmap-content h1 { font-size: 1.75rem; }
+        .roadmap-content h2 { font-size: 1.4rem; }
+        .roadmap-content h3 { font-size: 1.15rem; }
+
+        .roadmap-content p {
+            margin: 0.75rem 0;
+            color: var(--text-secondary);
+        }
+
+        .roadmap-content ul,
+        .roadmap-content ol {
+            margin: 0.75rem 0;
+            padding-left: 1.5rem;
+        }
+
+        .roadmap-content li {
+            margin: 0.4rem 0;
+            color: var(--text-secondary);
+        }
+
+        .roadmap-content strong {
+            color: var(--accent-yellow);
+            font-weight: 700;
+        }
+
+        .roadmap-content em {
+            color: var(--text-primary);
+            font-style: italic;
+        }
+
+        .roadmap-content code {
+            background: var(--primary-bg);
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: var(--accent-yellow);
+            font-size: 0.9rem;
+        }
+
+        .roadmap-content hr {
+            border: none;
+            border-top: 1px solid var(--card-border);
+            margin: 1.5rem 0;
+        }
+
+        .powered-by-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid var(--accent-yellow);
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            color: var(--accent-yellow);
+            margin-left: 1rem;
+        }
+    </style>
+</head>
+<body data-page="roadmap">
+    <div class="app-container">
+        <main class="main-content">
+            <div class="page-content">
+                <h1 class="page-title">🗺️ My Learning Roadmap</h1>
+                <p class="page-subtitle">Get a personalized AI-generated learning path</p>
+
+                <div class="card mb-4">
+                    <div class="grid grid-2">
+                        <div class="form-group">
+                            <label>Target Career</label>
+                            <input type="text" id="careerName" class="form-control" placeholder="e.g., Data Scientist">
+                        </div>
+                        <div class="form-group">
+                            <label>Hours per Day</label>
+                            <select id="hoursPerDay" class="form-control">
+                                <option value="1">1 hour</option>
+                                <option value="2" selected>2 hours</option>
+                                <option value="3">3 hours</option>
+                                <option value="4">4+ hours</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary btn-block" id="generateBtn" onclick="generateRoadmap()">
+                        🚀 Generate Roadmap
+                    </button>
+                </div>
+
+                <div id="roadmapResult" class="card" style="display: none;">
+                    <div class="flex-between mb-3">
+                        <h2 id="roadmapTitle" class="card-title">Your Roadmap</h2>
+                        <span class="powered-by-badge" id="poweredBy">⚡ AI Engine</span>
+                    </div>
+                    <div id="roadmapContent" class="roadmap-content mt-3"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/shared.js"></script>
+    <script src="js/roadmap.js"></script>
+</body>
+</html>

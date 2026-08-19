@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Center - DataPath Navigator</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="resources">
+    <div class="app-container">
+        <main class="main-content">
+            <div class="page-content">
+                <h1 class="page-title">📚 Resource Center</h1>
+                <p class="page-subtitle">Curated courses and learning materials</p>
+
+                <div class="grid grid-3" id="coursesContainer">
+                    <p class="text-muted">Loading courses...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/shared.js"></script>
+    <script>
+        (async function() {
+            if (!requireAuth()) return;
+
+            try {
+                const courses = await api.get("/courses/", { limit: 50 });
+                const container = document.getElementById("coursesContainer");
+
+                if (courses.length === 0) {
+                    container.innerHTML = '<p class="text-muted text-center" style="grid-column: 1 / -1;">No courses available yet.</p>';
+                    return;
+                }
+
+                container.innerHTML = courses.map(c => `
+                    <div class="card">
+                        <div class="flex-between mb-2">
+                            <span class="badge badge-yellow">${c.platform}</span>
+                            <span class="text-muted" style="font-size: 0.75rem;">ID: ${c.course_id}</span>
+                        </div>
+                        <h3 style="margin: 0.5rem 0;">${c.course_name}</h3>
+                        <a href="${c.course_link}" target="_blank" class="btn btn-primary btn-block mt-3">
+                            📖 View Course
+                        </a>
+                    </div>
+                `).join("");
+            } catch (err) {
+                showToast("Failed to load courses", "error");
+            }
+        })();
+    </script>
+</body>
+</html>

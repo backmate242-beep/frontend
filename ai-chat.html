@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat - DataPath Navigator</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="chat">
+    <div class="app-container">
+        <main class="main-content">
+            <div class="page-content" style="display: flex; flex-direction: column; height: calc(100vh - 70px);">
+                <h1 class="page-title">🤖 AI Career Counselor</h1>
+                <p class="page-subtitle">Chat with our AI assistant for career guidance</p>
+
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot">
+                            <div class="message-avatar">🤖</div>
+                            <div class="message-content">
+                                Hi! I'm your AI career counselor 👋<br><br>
+                                I can help you with career exploration, skill development, interview prep, resume tips, and learning roadmaps.<br><br>
+                                What would you like to know?
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-quick-actions">
+                        <button class="quick-btn" onclick="sendQuick('How do I become a data scientist?')">How to become Data Scientist?</button>
+                        <button class="quick-btn" onclick="sendQuick('What skills should I learn?')">What skills to learn?</button>
+                        <button class="quick-btn" onclick="sendQuick('Help me prepare for interviews')">Interview prep</button>
+                        <button class="quick-btn" onclick="sendQuick('Review my resume')">Resume tips</button>
+                    </div>
+
+                    <form class="chat-input-form" onsubmit="sendMessage(event)">
+                        <input type="text" id="chatInput" class="form-control" placeholder="Type your message..." autocomplete="off" required>
+                        <button type="submit" class="btn btn-primary">Send</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/shared.js"></script>
+    <script src="js/chat.js"></script>
+</body>
+</html>

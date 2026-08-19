@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - DataPath Navigator</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="admin">
+    <div class="app-container">
+        <main class="main-content">
+            <div class="page-content">
+                <h1 class="page-title">📊 Admin Dashboard</h1>
+                <p class="page-subtitle">Platform-wide statistics and management</p>
+
+                <div class="grid grid-4 mb-4" id="adminStats">
+                    <div class="card text-center">
+                        <div class="text-muted">Total Users</div>
+                        <h1 id="totalUsers" style="font-size: 2.5rem; color: var(--accent-yellow); margin-top: 0.5rem;">-</h1>
+                    </div>
+                    <div class="card text-center">
+                        <div class="text-muted">Students</div>
+                        <h1 id="totalStudents" style="font-size: 2.5rem; color: var(--accent-yellow); margin-top: 0.5rem;">-</h1>
+                    </div>
+                    <div class="card text-center">
+                        <div class="text-muted">Careers</div>
+                        <h1 id="totalCareers" style="font-size: 2.5rem; color: var(--accent-yellow); margin-top: 0.5rem;">-</h1>
+                    </div>
+                    <div class="card text-center">
+                        <div class="text-muted">Skills</div>
+                        <h1 id="totalSkills" style="font-size: 2.5rem; color: var(--accent-yellow); margin-top: 0.5rem;">-</h1>
+                    </div>
+                </div>
+
+                <div class="grid grid-2 mb-4">
+                    <div class="card">
+                        <div class="card-title">🏆 Top Skills</div>
+                        <div id="topSkills" class="mt-2"></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-title">💼 Top Careers</div>
+                        <div id="topCareers" class="mt-2"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-title">📈 Average Assessment Scores</div>
+                    <div class="grid grid-4 mt-2" id="avgScores"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/shared.js"></script>
+    <script>
+        (async function() {
+            if (!requireAdmin()) return;
+
+            try {
+                const data = await api.get("/dashboard/admin");
+
+                document.getElementById("totalUsers").textContent = data.overview.total_users;
+                document.getElementById("totalStudents").textContent = data.overview.total_students;
+                document.getElementById("totalCareers").textContent = data.overview.total_careers;
+                document.getElementById("totalSkills").textContent = data.overview.total_skills;
+
+                document.getElementById("topSkills").innerHTML = data.top_skills.length
+                    ? data.top_skills.map(s => `
+                        <div class="flex-between" style="padding: 0.5rem 0; border-bottom: 1px solid var(--card-border);">
+                            <span>${s.name}</span>
+                            <span class="badge badge-yellow">${s.count} students</span>
+                        </div>
+                    `).join("")
+                    : '<p class="text-muted">No data</p>';
+
+                document.getElementById("topCareers").innerHTML = data.top_careers.length
+                    ? data.top_careers.map(c => `
+                        <div class="flex-between" style="padding: 0.5rem 0; border-bottom: 1px solid var(--card-border);">
+                            <span>${c.name}</span>
+                            <span class="badge">${c.recommendations} recs</span>
+                        </div>
+                    `).join("")
+                    : '<p class="text-muted">No data</p>';
+
+                const scores = data.average_assessment_scores;
+                document.getElementById("avgScores").innerHTML = `
+                    <div class="text-center">
+                        <div class="text-muted">Aptitude</div>
+                        <h2 style="color: var(--accent-yellow);">${scores.aptitude}</h2>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-muted">Logical</div>
+                        <h2 style="color: var(--accent-yellow);">${scores.logical}</h2>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-muted">Communication</div>
+                        <h2 style="color: var(--accent-yellow);">${scores.communication}</h2>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-muted">Programming</div>
+                        <h2 style="color: var(--accent-yellow);">${scores.programming}</h2>
+                    </div>
+                `;
+            } catch (err) {
+                showToast("Failed to load analytics", "error");
+            }
+        })();
+    </script>
+</body>
+</html>

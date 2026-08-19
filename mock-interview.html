@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Interview - DataPath Navigator</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <style>
+        .interview-card {
+            background: var(--gradient-card);
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        .question-meta {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .question-text {
+            font-size: 1.15rem;
+            line-height: 1.6;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--primary-bg);
+            border-left: 4px solid var(--accent-yellow);
+            border-radius: 8px;
+        }
+        .answer-area {
+            width: 100%;
+            min-height: 150px;
+            padding: 1rem;
+            background: var(--primary-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+        }
+        .answer-area:focus {
+            outline: none;
+            border-color: var(--accent-yellow);
+        }
+        .hint-box {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid var(--accent-yellow);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .feedback-card {
+            background: var(--gradient-card);
+            border: 1px solid var(--accent-yellow);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .score-display {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            text-align: center;
+            border-radius: 50%;
+            background: var(--gradient-yellow);
+            color: var(--primary-bg);
+            font-size: 2rem;
+            font-weight: 700;
+            margin-right: 1rem;
+        }
+        .progress-bar-container {
+            background: var(--primary-bg);
+            height: 6px;
+            border-radius: 9999px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--gradient-yellow);
+            transition: width 0.3s ease;
+        }
+        .start-screen {
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+        .start-screen .icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body data-page="mock">
+    <div class="app-container">
+        <main class="main-content">
+            <div class="page-content">
+                <h1 class="page-title">🎤 Mock Interview Center</h1>
+                <p class="page-subtitle">Practice interviews with AI-powered feedback</p>
+
+                <!-- Start Screen -->
+                <div id="startScreen" class="interview-card start-screen">
+                    <div class="icon">🎤</div>
+                    <h2>Ready to Practice?</h2>
+                    <p class="text-muted mt-2 mb-4">Get AI-generated interview questions and instant feedback</p>
+                    
+                    <div class="form-group" style="max-width: 400px; margin: 0 auto 1rem;">
+                        <label>Career Role</label>
+                        <input type="text" id="careerSelect" class="form-control" value="Software Engineer" placeholder="e.g., Software Engineer">
+                    </div>
+                    <div class="form-group" style="max-width: 400px; margin: 0 auto 1.5rem;">
+                        <label>Number of Questions</label>
+                        <select id="numQuestions" class="form-control">
+                            <option value="5">5 Questions (Quick - 10 min)</option>
+                            <option value="10" selected>10 Questions (Standard - 20 min)</option>
+                            <option value="15">15 Questions (Full - 30 min)</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-primary btn-lg" onclick="startMockInterview()">
+                        🚀 Start Interview
+                    </button>
+                </div>
+
+                <!-- Interview Screen -->
+                <div id="interviewScreen" style="display: none;">
+                    <div class="interview-card">
+                        <div class="flex-between mb-2">
+                            <strong>Question <span id="questionNumber">1</span> / <span id="totalQuestions">10</span></strong>
+                            <span class="badge badge-yellow">🎤 Live Interview</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="progressBar" style="width: 10%;"></div>
+                        </div>
+                        
+                        <div class="question-meta">
+                            <span class="badge" id="questionCategory">Behavioral</span>
+                            <span class="badge badge-yellow" id="questionDifficulty">Medium</span>
+                        </div>
+                        
+                        <div class="question-text" id="questionText">
+                            Loading question...
+                        </div>
+                        
+                        <div class="hint-box">
+                            💡 <strong>Hint:</strong> <span id="questionHint">Take your time...</span>
+                        </div>
+                        
+                        <label style="font-weight: 600; margin-top: 1rem; display: block;">Your Answer:</label>
+                        <textarea id="answerText" class="answer-area" placeholder="Type your answer here... (Aim for 50-100 words)"></textarea>
+                        
+                        <div class="flex gap-2 mt-3">
+                            <button class="btn btn-primary" id="submitBtn" onclick="submitAnswer()">
+                                📤 Submit Answer
+                            </button>
+                            <button class="btn btn-secondary" id="nextBtn" onclick="nextQuestion()" style="display: none;">
+                                Next Question →
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Section -->
+                    <div id="feedbackSection" class="feedback-card" style="display: none;">
+                        <div class="flex" style="align-items: center; gap: 1rem;">
+                            <div class="score-display" id="scoreCircle">75</div>
+                            <div>
+                                <h3 style="margin: 0;">AI Feedback</h3>
+                                <p id="feedbackText" class="text-muted" style="margin: 0.5rem 0 0;"></p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-2 mt-3">
+                            <div>
+                                <strong style="color: var(--success);">✅ Strengths:</strong>
+                                <ul id="strengthsList" style="margin-top: 0.5rem; padding-left: 1.5rem;"></ul>
+                            </div>
+                            <div>
+                                <strong style="color: var(--danger);">💡 To Improve:</strong>
+                                <ul id="improvementsList" style="margin-top: 0.5rem; padding-left: 1.5rem;"></ul>
+                            </div>
+                        </div>
+                        
+                        <div id="sampleAnswerSection" style="margin-top: 1rem; display: none;">
+                            <strong>📝 Sample Better Answer:</strong>
+                            <p id="sampleAnswerText" style="margin-top: 0.5rem; padding: 1rem; background: var(--primary-bg); border-radius: 8px; font-style: italic;"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Screen -->
+                <div id="resultsScreen" class="interview-card" style="display: none;">
+                    <div class="text-center">
+                        <h2>🎉 Interview Complete!</h2>
+                        <div style="display: flex; justify-content: center; margin: 2rem 0;">
+                            <div style="width: 200px; height: 200px; border-radius: 50%; background: conic-gradient(var(--accent-yellow) var(--pct), var(--card-border) 0); display: flex; align-items: center; justify-content: center; position: relative;" id="finalScoreCircle" style="--pct: 75%;">
+                                <span style="font-size: 3rem; font-weight: 800; color: var(--accent-yellow);" id="finalScore">75</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h3>📊 Overall Feedback</h3>
+                    <p id="overallFeedback" style="line-height: 1.7;"></p>
+                    
+                    <h3>📈 Performance by Category</h3>
+                    <div class="results-grid" id="categoryGrid"></div>
+                    
+                    <h3>💡 Recommendations to Improve</h3>
+                    <ol id="recommendationsList" style="line-height: 1.8; padding-left: 1.5rem;"></ol>
+                    
+                    <div class="flex gap-2 mt-4" style="justify-content: center;">
+                        <button class="btn btn-primary" onclick="startNewSession()">🔄 Start New Interview</button>
+                        <a href="dashboard.html" class="btn btn-secondary">📊 Dashboard</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/shared.js"></script>
+    <script src="js/mock-interview.js"></script>
+</body>
+</html>

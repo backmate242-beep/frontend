@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Recommendations - DataPath Navigator</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .career-card {
+            background: var(--gradient-card);
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .career-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-yellow);
+            box-shadow: var(--shadow-yellow);
+        }
+
+        .match-circle {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: conic-gradient(var(--accent-yellow) var(--pct), var(--primary-bg) 0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .match-circle::before {
+            content: "";
+            position: absolute;
+            inset: 6px;
+            background: var(--card-bg);
+            border-radius: 50%;
+        }
+
+        .match-circle span {
+            position: relative;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--accent-yellow);
+        }
+    </style>
+</head>
+<body data-page="recs">
+    <div class="app-container">
+        <main class="main-content">
+            <div class="page-content">
+                <div class="flex-between mb-3">
+                    <div>
+                        <h1 class="page-title">🎯 AI Career Recommendations</h1>
+                        <p class="page-subtitle">Personalized matches based on your skills</p>
+                    </div>
+                    <button class="btn btn-primary" id="generateBtn" onclick="generateRecommendations()">
+                        ✨ Generate New
+                    </button>
+                </div>
+
+                <div id="recommendationsContainer" class="grid grid-2">
+                    <p class="text-muted text-center" style="grid-column: 1 / -1; padding: 3rem;">
+                        Click "Generate New" to get AI-powered career recommendations
+                    </p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/shared.js"></script>
+    <script src="js/recommendations.js"></script>
+</body>
+</html>

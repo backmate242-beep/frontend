@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DataPath Navigator - AI Career Guidance</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        .landing {
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .landing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .landing-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* Logo Image Styling */
+        .landing-logo-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .landing-logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .landing-logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .landing-logo-text .main {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .landing-logo-text .sub {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+        }
+
+        .landing-nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .landing-nav a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .landing-nav a:hover { color: var(--accent-yellow); }
+
+        .landing-nav .active {
+            color: var(--accent-yellow);
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            padding: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-content p {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 500px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .link-learn-more {
+            color: var(--text-primary);
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Hero Image Styling */
+        .hero-illustration {
+            width: 100%;
+            max-width: 500px;
+            height: 400px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-illustration img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            padding: 2rem 4rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .feature-card {
+            background: var(--gradient-card);
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-yellow);
+            box-shadow: var(--shadow-yellow);
+        }
+
+        /* Feature Icon Styling */
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: rgba(251, 191, 36, 0.15);
+        }
+
+        .feature-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .feature-content h3 {
+            font-size: 1.125rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-content p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .landing-header { padding: 1rem 1.5rem; }
+            .hero {
+                grid-template-columns: 1fr;
+                padding: 2rem 1.5rem;
+            }
+            .hero-content h1 { font-size: 2rem; }
+            .features {
+                grid-template-columns: 1fr;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars-bg"></div>
+
+    <div class="landing">
+        <!-- Header -->
+        <header class="landing-header">
+            <div class="landing-logo">
+                <div class="landing-logo-icon">
+                    <img src="photos/main icon.png" alt="DataPath Navigator Logo">
+                </div>
+                <div class="landing-logo-text">
+                    <span class="main">DataPath</span>
+                    <span class="sub">NAVIGATOR</span>
+                </div>
+            </div>
+            <nav class="landing-nav">
+                <a href="index.html" class="active">Home</a>
+                <a href="dashboard.html">Dashboard</a>
+                <a href="login.html">Login</a>
+                <a href="register.html">Register</a>
+                <a href="register.html" class="btn btn-primary">Get Started</a>
+            </nav>
+        </header>
+
+        <!-- Hero -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Navigate Your Future<br>with AI Career Guidance</h1>
+               <p>Unlock your potential with personalized career roadmaps, skill analysis, and industry insights powered by advanced AI.</p>
+                <div class="hero-buttons">
+                    <a href="register.html" class="btn btn-primary">Build Your Roadmap</a>
+                    <a href="dashboard.html" class="link-learn-more">Learn More</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-illustration">
+                    <img src="photos/hero image.png" alt="Career Guidance Illustration">
+                </div>
+            </div>
+        </section>
+
+        <!-- Features -->
+        <section class="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <img src="photos/ai career matching.png" alt="AI Career Matching Icon">
+                </div>
+                <div class="feature-content">
+                    <h3>AI Career Matching</h3>
+                    <p>AI-driven career matching to provide personalized career roadmaps and skill analysis.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <img src="photos/skill gap analysis.png" alt="Skill Gap Analysis Icon">
+                </div>
+                <div class="feature-content">
+                    <h3>Skill Gap Analysis</h3>
+                    <p>Identify and bridge skill gaps with our comprehensive analysis tools.</p>
+                </div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <img src="photos/industry analysis.png" alt="Industry Analysis Icon">
+                </div>
+                <div class="feature-content">
+                    <h3>Industry Analysis</h3>
+                    <p>Stay ahead of the curve with the latest industry trends and insights.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            © 2026 DataPath Navigator - All Rights Reserved
+        </footer>
+    </div>
+</body>
+</html>

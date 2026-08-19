@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - DataPath Navigator</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <style>
+        /* Dashboard Stat Card Icons - Image Style */
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--primary-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            border: 1px solid var(--card-border);
+        }
+
+        .stat-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Profile Picture Circle */
+        .profile-picture {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--gradient-yellow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            border: 2px solid var(--accent-yellow);
+            flex-shrink: 0;
+        }
+
+        .profile-picture img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-picture-fallback {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-bg);
+        }
+    </style>
+</head>
+<body data-page="dashboard">
+    <div class="app-container">
+        <main class="main-content">
+            <div class="page-content">
+                <h1 class="page-title">Welcome back, <span id="userName">Student</span>! 👋</h1>
+                <p class="page-subtitle">Here's your career progress overview</p>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-4 mb-4">
+                    <div class="card">
+                        <div class="stat-icon">
+                            <img src="photos/icon-matching.png" alt="Skills" 
+                                 onerror="this.style.display='none'; this.parentElement.innerHTML='📊';">
+                        </div>
+                        <div class="card-title">Total Skills</div>
+                        <h1 style="font-size: 2.5rem; color: var(--accent-yellow);" id="statSkills">0</h1>
+                    </div>
+                    <div class="card">
+                        <div class="stat-icon">
+                            <img src="photos/icon-skillgap.png" alt="Recommendations" 
+                                 onerror="this.style.display='none'; this.parentElement.innerHTML='🎯';">
+                        </div>
+                        <div class="card-title">Recommendations</div>
+                        <h1 style="font-size: 2.5rem; color: var(--accent-yellow);" id="statRecs">0</h1>
+                    </div>
+                    <div class="card">
+                        <div class="stat-icon">
+                            <img src="photos/icon-trends.png" alt="Assessments" 
+                                 onerror="this.style.display='none'; this.parentElement.innerHTML='📝';">
+                        </div>
+                        <div class="card-title">Assessments</div>
+                        <h1 style="font-size: 2.5rem; color: var(--accent-yellow);" id="statAssessments">0</h1>
+                    </div>
+                    <div class="card card-yellow">
+                        <div class="card-title">🏆 Top Match</div>
+                        <h1 style="font-size: 2.5rem;" id="statTopMatch">-</h1>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card mb-4">
+                    <div class="card-title">⚡ Quick Actions</div>
+                    <div class="grid grid-3 mt-2">
+                        <a href="ai-recommendations.html" class="btn btn-primary">🎯 Get AI Recommendations</a>
+                        <a href="ai-chat.html" class="btn btn-outline-yellow">🤖 Chat with AI</a>
+                        <a href="skill-gap.html" class="btn btn-secondary">📊 Analyze Skill Gap</a>
+                    </div>
+                </div>
+
+                <!-- Profile + Top Career -->
+                <div class="grid grid-2">
+                    <div class="card">
+                        <div class="flex-between mb-2">
+                            <div class="card-title">👤 Your Profile</div>
+                            <a href="profile.html" class="btn btn-sm btn-outline-yellow">Edit</a>
+                        </div>
+                        <div id="profileInfo" class="text-muted">Loading...</div>
+                    </div>
+                    <div class="card card-yellow">
+                        <div class="card-title">🎯 Top Career Match</div>
+                        <div id="topCareer" class="mt-2">Get recommendations first!</div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer">
+                © 2026 DataPath Navigator - All Rights Reserved
+            </footer>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/shared.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

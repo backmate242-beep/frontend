@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - DataPath Navigator</title>
+    <link rel="stylesheet" href="css/theme.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/pages.css">
+    <style>
+        /* ✅ NEW: Resume Upload Styles */
+        .resume-upload-section {
+            background: var(--gradient-card);
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--card-border);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--primary-bg);
+        }
+
+        .upload-area:hover {
+            border-color: var(--accent-yellow);
+            background: rgba(251, 191, 36, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--accent-yellow);
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-text {
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-formats {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .resume-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--primary-bg);
+            border-radius: var(--border-radius-sm);
+            display: none;
+        }
+
+        .resume-status.show {
+            display: block;
+        }
+
+        .resume-status.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .resume-status.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .resume-status.loading {
+            border-left: 4px solid var(--accent-yellow);
+        }
+
+        .extracted-skills {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--primary-bg);
+            border-radius: var(--border-radius-sm);
+            display: none;
+        }
+
+        .extracted-skills.show {
+            display: block;
+        }
+
+        .skill-chip {
+            display: inline-block;
+            padding: 0.3rem 0.7rem;
+            margin: 0.25rem;
+            background: rgba(251, 191, 36, 0.2);
+            border: 1px solid var(--accent-yellow);
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            color: var(--accent-yellow);
+        }
+
+        .skill-chip.new {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .ai-analysis {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: var(--primary-bg);
+            border-left: 4px solid var(--accent-yellow);
+            border-radius: var(--border-radius-sm);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            display: none;
+        }
+
+        .ai-analysis.show {
+            display: block;
+        }
+
+        .spinner-small {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--card-border);
+            border-top-color: var(--accent-yellow);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            vertical-align: middle;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
+</head>
+<body data-page="profile">
+    <div class="app-container">
+        <main class="main-content">
+            <div class="page-content">
+                <h1 class="page-title">👤 My Profile</h1>
+                <p class="page-subtitle">Manage your information, skills, and resume</p>
+
+                <!-- ✅ NEW: Resume Upload Section (Full Width) -->
+                <div class="resume-upload-section">
+                    <div class="flex-between mb-3">
+                        <div class="card-title">📄 Resume Upload & AI Analysis</div>
+                        <span class="text-muted" style="font-size: 0.8rem;">Powered by AI</span>
+                    </div>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">📤</div>
+                        <div class="upload-text">
+                            <strong>Drop your resume here</strong> or click to browse
+                        </div>
+                        <div class="upload-formats">
+                            Supports: PDF, DOCX, TXT (Max 5MB)
+                        </div>
+                        <input type="file" id="resumeFile" accept=".pdf,.docx,.txt" style="display: none;">
+                    </div>
+
+                    <div class="resume-status" id="resumeStatus">
+                        <div id="resumeStatusText"></div>
+                    </div>
+
+                    <div class="extracted-skills" id="extractedSkills">
+                        <div class="flex-between mb-2">
+                            <strong>🎯 Extracted Skills:</strong>
+                            <button class="btn btn-sm btn-primary" id="addSkillsBtn" onclick="addExtractedSkills()">
+                                ➕ Add All to My Skills
+                            </button>
+                        </div>
+                        <div id="skillsList"></div>
+                    </div>
+
+                    <div class="ai-analysis" id="aiAnalysis">
+                        <strong>🤖 AI Resume Analysis:</strong>
+                        <div id="aiAnalysisText" style="margin-top: 0.5rem; white-space: pre-wrap;"></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-2">
+                    <!-- Profile Info -->
+                    <div class="card">
+                        <div class="card-title">Personal Information</div>
+                        <form id="profileForm" onsubmit="updateProfile(event)">
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" id="fullName" class="form-control" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="email" class="form-control" disabled>
+                            </div>
+                            <div class="form-group">
+                                <label>Age</label>
+                                <input type="number" id="age" class="form-control" min="15" max="100">
+                            </div>
+                            <div class="form-group">
+                                <label>Gender</label>
+                                <select id="gender" class="form-control">
+                                    <option value="">Select</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Degree</label>
+                                <input type="text" id="degree" class="form-control" placeholder="B.Tech, BBA, etc.">
+                            </div>
+                            <div class="form-group">
+                                <label>Department</label>
+                                <input type="text" id="department" class="form-control" placeholder="Computer Science">
+                            </div>
+                            <div class="form-group">
+                                <label>Year of Study</label>
+                                <input type="number" id="yearOfStudy" class="form-control" min="1" max="6">
+                            </div>
+                            <div class="form-group">
+                                <label>CGPA</label>
+                                <input type="number" id="cgpa" class="form-control" step="0.01" min="0" max="10">
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">💾 Save Profile</button>
+                        </form>
+                    </div>
+
+                    <!-- Skills Section -->
+                    <div>
+                        <div class="card mb-3">
+                            <div class="card-title">➕ Add Skill</div>
+                            <form onsubmit="addSkill(event)">
+                                <div class="form-group">
+                                    <label>Select Skill</label>
+                                    <select id="skillSelect" class="form-control" required>
+                                        <option value="">Loading skills...</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Proficiency</label>
+                                    <select id="proficiency" class="form-control">
+                                        <option value="Beginner">Beginner</option>
+                                        <option value="Intermediate" selected>Intermediate</option>
+                                        <option value="Advanced">Advanced</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Add Skill</button>
+                            </form>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-title">📋 My Skills</div>
+                            <div id="mySkills" class="mt-2">
+                                <p class="text-muted">Loading...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/shared.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html>
